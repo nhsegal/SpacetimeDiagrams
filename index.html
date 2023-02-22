@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Time Dilation</title>
+		<link href="styles.css" rel="stylesheet">
+  </head>
+  <body>
+   
+    <div id="myContainer"></div>
+    <span id="sliderPos" oninput="setSpeed1()"></span>
+    <span
+      id="buttonPos"
+      onchange="
+		 	beta1=input1.value;
+  			speedSlider.value(input1.value()*200);
+  			setSpeed1();
+		 	">
+    </span>
+
+    <span id="sliderPos2" oninput="setSpeed2()"></span>
+    <span
+      id="buttonPos2"
+      onchange="
+		 	beta2=input2.value;
+  			speedSlider2.value(input2.value()*200);
+  			setSpeed2();
+		 	">
+    </span>
+
+
+
+    <br />
+    <div id="modal">
+      <div class="modal-content">
+    <span class="close">&times;</span>
+     
+      <h2>What am I looking at?</h2>
+      This is a spacetime diagram. It's like a position-time graph with the axes
+      inverted; time is the vertical axis and position is the horizontal axis. A
+      vertical line represents something at rest (i.e. maintaining the same
+      location as time progresses). The diagram shows how time differs for
+      observers in relative motion. There is a black frame of reference and a
+      red frame of reference. Each frame has a clock, which is at rest at the
+      origin within its respective reference frame.
+
+    </div>
+  </div>
+  </body>
+
+  <script
+    language="javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.js"></script>
+  <script
+    language="javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.dom.js"></script>
+  <script language="javascript" src="sketch.js"></script>
+</html>
