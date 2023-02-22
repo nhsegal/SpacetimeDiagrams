@@ -37,7 +37,7 @@ function setup() {
   modalButton.mousePressed(showModal)
 
   box1 = createCheckbox("", true);
-  box2 = createCheckbox("", false);
+  box2 = createCheckbox("", true);
   box3 = createCheckbox("", false);
   box4 = createCheckbox("", false);
 
@@ -58,7 +58,7 @@ function setup() {
   const modal = document.getElementById('modal');
   span = document.getElementsByClassName("close")[0];
   span.onclick = function() {
-    modal.classList.remove("my-class");
+    modal.classList.remove("visible");
   }
 }
 
@@ -75,137 +75,117 @@ function draw() {
   line(width, height, 0, height);
 
   push();
-  translate(width / 2, height - 160);
-  scale(1, -1);
+    translate(width / 2, 2*height/3);
+    scale(1, -1);
 
-  //dotted lines for light cone
-  stroke(0, 150, 0);
-  strokeWeight(2.5);
-  fill(0);
-  for (let i = 0; i < height; i = i + 12) {
-    line(i, i, i + 7, i + 7);
-    line(-i, i, -i - 7, i + 7);
-  }
+    //dotted lines for light cone
+    stroke(0, 150, 0);
+    strokeWeight(2.5);
+    fill(0);
+    for (let i = -height/2; i < height; i = i + 12) {
+      line(i, i, i + 7, i + 7);
+      line(-i, i, -i - 7, i + 7);
+    }
 
-  //black axes
-  stroke(0);
-  strokeWeight(2);
-  line(-beta1 * height, -height, beta1 * height, height);
-  if ( beta1 != 0) {
-    line(-1/beta1 * height, -height, 1/beta1 * height, height);
-  } else {
-    line(-width, 0, width, 0);
-  }
+    //black axes
+    stroke(0);
+    strokeWeight(1.5);
+    line(-beta1 * height, -height, beta1 * height, height);
+    if ( beta1 != 0) {
+      line(-1/beta1 * height, -height, 1/beta1 * height, height);
+    } else {
+      line(-width, 0, width, 0);
+    }
   
 
-
-  //black equitemp lines
-  for (let i = -spacing1*25; i < spacing1*25; i = i + spacing1) {
-    if (box1.checked() == true) {
-      strokeWeight(0.6);
-      for (let dash = -width; dash < width; dash = dash + 12) {
-        line(dash, i + dash * beta1, dash + 6, i + beta1 * (dash + 6));
-        line(i + dash * beta1, 0 + dash, i + beta1 * (dash + 6), dash + 6);
+    //black dashed lines
+    for (let i = -spacing1*25; i < spacing1*25; i = i + spacing1) {
+      if (box1.checked() == true) {
+        strokeWeight(0.3);
+        for (let dash = -width; dash < width; dash = dash + 12) {
+          line(dash, i + dash * beta1, dash + 6, i + beta1 * (dash + 6));
+          line(i + dash * beta1, 0 + dash, i + beta1 * (dash + 6), dash + 6);
+        }
       }
-    }
-    //black light signals
-    if (box3.checked() == true) {
-      strokeWeight(0.6);
-      stroke(0, 100, 0);
-      if (beta1 < beta2) {
-        line(
-          gamma1 * gamma1 * beta1 * i,
-          gamma1 * gamma1 * i,
-          gamma1 * gamma1 * beta1 * i +
-            gamma1 *
+      //black light signals
+      if (box3.checked() == true) {
+        strokeWeight(0.6);
+        stroke(0, 100, 0);
+        if (beta1 < beta2) {
+          line(
+            gamma1 * gamma1 * beta1 * i,
+            gamma1 * gamma1 * i,
+            gamma1 * gamma1 * beta1 * i + gamma1 * gamma1 * (beta2 - beta1) * i * (1 + beta2) * gamma2 * gamma2,
+            gamma1 * gamma1 * i + gamma1 * gamma1 * (beta2 - beta1) * i * (1 + beta2) * gamma2 * gamma2
+          );
+        } else {
+          line(
+            gamma1 * gamma1 * beta1 * i,
+            gamma1 * gamma1 * i,
+            gamma1 * gamma1 * beta1 * i +
               gamma1 *
-              (beta2 - beta1) *
-              i *
-              (1 + beta2) *
-              gamma2 *
-              gamma2,
-          gamma1 * gamma1 * i +
-            gamma1 *
-              gamma1 *
-              (beta2 - beta1) *
-              i *
-              (1 + beta2) *
-              gamma2 *
-              gamma2
-        );
-      } else {
-        line(
-          gamma1 * gamma1 * beta1 * i,
-          gamma1 * gamma1 * i,
-          gamma1 * gamma1 * beta1 * i +
-            gamma1 *
               gamma1 *
               (beta2 - beta1) *
               i *
               (1 - beta2) *
               gamma2 *
               gamma2,
-          gamma1 * gamma1 * i -
-            gamma1 *
+            gamma1 * gamma1 * i -
+              gamma1 *
               gamma1 *
               (beta2 - beta1) *
               i *
               (1 - beta2) *
               gamma2 *
               gamma2
-        );
+          );
+        }
       }
+
+      //black time axis numbers
+      push();
+        translate(gamma1 * gamma1 * beta1 * i, gamma1 * gamma1 * i);
+        scale(1, -1);
+        ellipse(0,0,4)
+        noStroke()
+        textAlign(CENTER, CENTER)
+        if ( i > 0.5 || i < -0.5)  {
+          text((i / spacing1).toFixed(0), -10, 0);
+        }
+        if ( gamma1 * gamma1 * i > height/2 + 30 && gamma1 * gamma1 * i < 2*height/3 -10) {
+          text('Time', -25, -16);
+        }
+      pop();
+
+    //black space axes numbers
+      push();
+        translate(gamma1 * gamma1 * i, gamma1 * gamma1 * i * beta1 );
+        scale(1, -1);
+        ellipse(0,0,4)
+        textSize(16);
+        noStroke();
+        if ( i > 0.5 || i < -0.5) {
+          text((i / spacing1).toFixed(0), 0, 15);
+        }
+      pop();
     }
 
-    //black clocks
-    textSize(16);
-    strokeWeight(3);
-    stroke(0, 0, 0, 190);
-    fill(255);
-   
-    textAlign(CENTER, CENTER);
-    fill(0);
-    strokeWeight(1);
-    stroke(0);
-
-    //time
-    push();
-    translate(gamma1 * gamma1 * beta1 * i, gamma1 * gamma1 * i);
-    scale(1, -1);
-    ellipse(0,0,4)
-    if ( i != 0) {
-      text((i / spacing1).toFixed(0), -10, 0);
-    }
-   
-    pop();
-
-    //space
-    push();
-    translate(gamma1 * gamma1 * i, gamma1 * gamma1 * i * beta1 );
-    scale(1, -1);
-    ellipse(0,0,4)
-    if ( i != 0) {
-    text((i / spacing1).toFixed(0), 0, 13);
-    }
-    pop();
-    
-  }
-
-  //red axes
-  stroke(220, 0, 0);
-  strokeWeight(1);
-
-  line(0, 0, beta2 * height, height);
-  line(0, 0, beta2 * height, height);
+    //red axes
+    stroke(220, 0, 0);
+    strokeWeight(1.5);
+    line(-beta2 * height/2, -height/2, beta2 * height, height);
+    line(-height/2, -beta2 * height/2, height, beta2 * height);
 
   //red equitemps
-  for (let i = 0; i < 2 * height; i = i + spacing2) {
+  for (let i = -spacing2*25; i < spacing2*25; i = i + spacing2) {
     if (box2.checked() == true) {
-      strokeWeight(0.6);
-      for (let dash = 0; dash < width; dash = dash + 12) {
-        line(dash, i + dash * beta2, dash + 6, i + beta2 * (dash + 6));
-        line(-dash, i - dash * beta2, -dash - 6, i - beta2 * (dash + 6));
-      }
+    stroke(220, 0, 0);
+     strokeWeight(0.3);
+     for (let dash = -width; dash < width; dash = dash + 12) {
+       line(dash, i + dash * beta2, dash + 6, i + beta2 * (dash + 6));
+       line(i + dash * beta2, 0 + dash, i + beta2 * (dash + 6), dash + 6);
+     }
+    
     }
 
     if (box4.checked() == true) {
@@ -258,21 +238,17 @@ function draw() {
 
     strokeWeight(3);
     stroke(200, 0, 0, 190);
-    fill(255);
-    ellipse(gamma2 * gamma2 * beta2 * i, gamma2 * gamma2 * i, 25, 25);
+    fill(200, 0, 0, 190)
+    ellipse(gamma2 * gamma2 * beta2 * i, gamma2 * gamma2 * i, 2, 2);
     textSize(16);
-    strokeWeight(1);
-    fill(200, 0, 0, 190);
+    noStroke();
     textAlign(CENTER, CENTER);
 
     push();
     translate(gamma2 * gamma2 * beta2 * i, gamma2 * gamma2 * i);
     scale(1, -1);
-    text((i / spacing2).toFixed(0), 0, 0);
+    text((i / spacing2).toFixed(0), -10, 0);
     pop();
-    //red dots on black t axis
-    //fill(255,0,0);
-    //ellipse((1/(1-beta1*beta2))*beta1*i, -(1/(1-beta1*beta2))*i, 5, 5);
   }
   pop();
   fill(255);
@@ -281,12 +257,11 @@ function draw() {
   fill(0);
   textSize(16);
   textAlign(CENTER);
-  text("Show Lines of\nSimultaneity", 336, height - 115);
+  text("Show \nGridlines", 336, height - 115);
   text("Send Light \nSignals", 445, height - 115);
   text("0", 204, height - 78);
-  textSize(16);
   text("-0.98c", 144,height - 78);
-  textSize(16);
+
   text("0.98c", 266, height - 78);
   strokeWeight(1);
   line(204, height - 70, 204, height - 52);
@@ -308,7 +283,7 @@ function draw() {
 function windowResized() {}
 
 function showModal(){
-  modal.classList.add("my-class");
+  modal.classList.add("visible");
 }
 
 function setSpeed1() {
