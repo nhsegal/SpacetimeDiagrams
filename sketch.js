@@ -18,6 +18,7 @@ let box3;
 let box4;
 let modalButton;
 let span;
+let lastBlackGridChoice;
 
 function setup() {
   let cnv = createCanvas(windowWidth, windowHeight - 30);
@@ -39,9 +40,15 @@ function setup() {
   box1 = createCheckbox("", true);
   box2 = createCheckbox("", false);
   box3 = createCheckbox("", true);
-  box4 = createCheckbox("", false);
+  box4 = createCheckbox("", true);
   box5 = createCheckbox("", false);
   box6 = createCheckbox("", false);
+  /*
+  box1.changed(() => {
+    lastBlackGridChoice = box1.checked()
+    console.log(lastBlackGridChoice)
+  });
+  */
 
   box1.position(442, height - 64);
   box2.position(442, height - 22);
@@ -101,6 +108,11 @@ function draw() {
     }
 
     if (box3.checked() == true) {
+    //  speedSlider.show();
+    //  input1.show();
+    //  box1.show();
+    //  box1.checked(lastBlackGridChoice);
+
       //black axes
       stroke(0);
       strokeWeight(1.5);
@@ -122,7 +134,7 @@ function draw() {
         text((i / spacing1).toFixed(0), -10, 0);
       }
       if (
-        gamma1 * gamma1 * i > height / 2 + 45 &&
+        gamma1 * gamma1 * i > height / 2 + 15 &&
         gamma1 * gamma1 * i < (2 * height) / 3 - 10
       ) {
         text("Time", -25, -36);
@@ -146,17 +158,19 @@ function draw() {
         text("Position", -35, 40);
       }
       pop();
+    } else {
+     // speedSlider.hide();
+     // input1.hide();
+     // box1.hide();
     }
   }
 
-  if (box5.checked() == true) { 
-
-    push()
-    rotate(atan(beta1))
-    fill(200,200,200, 100)
-    rect(-width-200,0,2*(width+200),2*height)
+  if (box5.checked() == true) {
+    push();
+    rotate(atan(beta1));
+    fill(200, 200, 200, 100);
+    rect(-width - 200, 0, 2 * (width + 200), 2 * height);
     pop();
- 
   }
 
   //red equitemps
@@ -171,15 +185,15 @@ function draw() {
     }
 
     if (box4.checked() == true) {
-        //red axes
-  stroke(220, 0, 0);
-  strokeWeight(1.5);
-  line(-beta2 * height, -height, beta2 * height, height);
-  if (beta2 != 0) {
-    line((-1 / beta2) * height, -height, (1 / beta2) * height, height);
-  } else {
-    line(-width, 0, width, 0);
-  }
+      //red axes
+      stroke(220, 0, 0);
+      strokeWeight(1.5);
+      line(-beta2 * height, -height, beta2 * height, height);
+      if (beta2 != 0) {
+        line((-1 / beta2) * height, -height, (1 / beta2) * height, height);
+      } else {
+        line(-width, 0, width, 0);
+      }
       strokeWeight(3);
       stroke(200, 0, 0, 190);
       fill(200, 0, 0, 190);
@@ -199,7 +213,7 @@ function draw() {
         text((i / spacing2).toFixed(0), -10, 0);
       }
       if (
-        gamma2 * gamma2 * i > height / 2 + 55 &&
+        gamma2 * gamma2 * i > height / 2 + 40 &&
         gamma2 * gamma2 * i < (2 * height) / 3 - 10
       ) {
         text("Time", -25, -16);
@@ -214,17 +228,26 @@ function draw() {
       textSize(16);
       noStroke();
       if (i > 0.5 || i < -0.5) {
-        text((i / spacing2).toFixed(0), 0, 15);
+        text((i / spacing2).toFixed(0), 0, 10);
       }
       if (
         gamma2 * gamma2 * i > (3 * width) / 8 + 110 &&
         gamma2 * gamma2 * i < width / 2 - 10
       ) {
-        text("Position", -95, 40);
+        text("Position", -95, 35);
       }
       pop();
     }
   }
+
+  if (box6.checked() == true) {
+    push();
+    rotate(atan(beta2));
+    fill(250, 200, 200, 100);
+    rect(-width - 200, 0, 2 * (width + 200), 2 * height);
+    pop();
+  }
+
   pop();
   fill(255);
 
@@ -234,6 +257,7 @@ function draw() {
   textAlign(CENTER);
   text("Show \nAxes", 336, height - 115);
   text("Show \nGridlines", 445, height - 115);
+  text("Show \nFuture", 535, height - 115);
   text("0", 204, height - 78);
   text("-0.98c", 144, height - 78);
 
@@ -254,7 +278,20 @@ function draw() {
   text("Velocity:", 40, height - 15);
 }
 
-function windowResized() {}
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight - 30);
+  speedSlider.position(145, height - 63);
+  speedSlider2.position(145, height - 23);
+  modalButton.position(width - 168, height - 16);
+  box1.position(442, height - 64);
+  box2.position(442, height - 22);
+  box3.position(335, height - 64);
+  box4.position(335, height - 22);
+  box5.position(535, height - 64);
+  box6.position(535, height - 22);
+  input1.position(84, height - 63);
+  input2.position(84, height - 23);
+}
 
 function showModal() {
   modal.classList.add("visible");
