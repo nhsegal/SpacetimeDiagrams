@@ -103,6 +103,11 @@ function draw() {
     scale(1, -1);
     text('D', -8*spacing-10,-4*spacing-10)
     scale(1, -1);
+
+    ellipse(0,8*spacing,10,10)
+    scale(1, -1);
+    text('E', -10,-8*spacing-10)
+    scale(1, -1);
   }
 
 
@@ -150,9 +155,9 @@ function draw() {
       }
       if (
         gamma1 * gamma1 * i > height / 2 + 15 &&
-        gamma1 * gamma1 * i < (2 * height) / 3 - 10
+        gamma1 * gamma1 * i < (2 * height) / 3 - 75
       ) {
-        text("Time", -25, -36);
+        text("Time", -25, -64);
       }
       pop();
 
@@ -227,7 +232,7 @@ function draw() {
         gamma2 * gamma2 * i > height / 2 + 40 &&
         gamma2 * gamma2 * i < (2 * height) / 3 - 10
       ) {
-        text("Time", -25, -16);
+        text("Time", -25, -36);
       }
       pop();
 
