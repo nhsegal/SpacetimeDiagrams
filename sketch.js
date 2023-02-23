@@ -127,11 +127,7 @@ function draw() {
     }
 
     if (box3.checked() == true) {
-    //  speedSlider.show();
-    //  input1.show();
-    //  box1.show();
-    //  box1.checked(lastBlackGridChoice);
-
+   
       //black axes
       stroke(0);
       strokeWeight(1.5);
@@ -305,7 +301,7 @@ function windowResized() {
   box4.position(335, height - 22);
   box5.position(535, height - 64);
   box6.position(535, height - 22);
-  box7.position(35, height - 22);
+  box7.position(15, height - 117);
   input1.position(84, height - 63);
   input2.position(84, height - 23);
 }
