@@ -15,54 +15,56 @@ let input3;
 let box1;
 let box2;
 let box3;
-let box4
+let box4;
 let modalButton;
 let span;
 
 function setup() {
-  let cnv = createCanvas(windowWidth, windowHeight-30)
+  let cnv = createCanvas(windowWidth, windowHeight - 30);
   cnv.parent("myContainer");
   strokeWeight(0.25);
   stroke(0);
   speedSlider = createSlider(-196, 196, 0);
   speedSlider2 = createSlider(-196, 196, 120);
-  speedSlider.position(145, height -63);
-  speedSlider2.position(145, height -23);
+  speedSlider.position(145, height - 63);
+  speedSlider2.position(145, height - 23);
   speedSlider.parent("sliderPos");
   speedSlider2.parent("sliderPos2");
   speedSlider.style("width", "130px");
   speedSlider2.style("width", "130px");
   modalButton = createButton("Questions and Answers");
   modalButton.position(width - 168, height - 16);
-  modalButton.mousePressed(showModal)
+  modalButton.mousePressed(showModal);
 
   box1 = createCheckbox("", true);
-  box2 = createCheckbox("", true);
-  box3 = createCheckbox("", false);
+  box2 = createCheckbox("", false);
+  box3 = createCheckbox("", true);
   box4 = createCheckbox("", false);
+  box5 = createCheckbox("", false);
+  box6 = createCheckbox("", false);
 
-  box1.position(335, height - 64);
-  box2.position(335, height - 22);
-  box3.position(442, height - 64);
-  box4.position(442,  height - 22);
+  box1.position(442, height - 64);
+  box2.position(442, height - 22);
+  box3.position(335, height - 64);
+  box4.position(335, height - 22);
+  box5.position(535, height - 64);
+  box6.position(535, height - 22);
 
   input1 = createInput("0");
   input1.parent("buttonPos");
-  input1.position(84, height -63);
+  input1.position(84, height - 63);
   input1.style("width", "30px");
 
   input2 = createInput(".6");
   input2.parent("buttonPos2");
   input2.position(84, height - 23);
   input2.style("width", "30px");
-  const modal = document.getElementById('modal');
+  const modal = document.getElementById("modal");
   span = document.getElementsByClassName("close")[0];
-  span.onclick = function() {
+  span.onclick = function () {
     modal.classList.remove("visible");
-  }
+  };
 }
-
-
 
 function draw() {
   background(255);
@@ -75,214 +77,153 @@ function draw() {
   line(width, height, 0, height);
 
   push();
-    translate(width / 2, 2*height/3);
-    scale(1, -1);
+  translate(width / 2, (2 * height) / 3);
+  scale(1, -1);
 
-    //dotted lines for light cone
-    stroke(0, 150, 0);
-    strokeWeight(2.5);
-    fill(0);
-    for (let i = -height/2; i < height; i = i + 12) {
-      line(i, i, i + 7, i + 7);
-      line(-i, i, -i - 7, i + 7);
-    }
+  //dotted lines for light cone
+  stroke(0, 150, 0);
+  strokeWeight(2.5);
+  fill(0);
+  for (let i = -height / 2; i < height; i = i + 12) {
+    line(i, i, i + 7, i + 7);
+    line(-i, i, -i - 7, i + 7);
+  }
 
-    //black axes
-    stroke(0);
-    strokeWeight(1.5);
-    line(-beta1 * height, -height, beta1 * height, height);
-    if ( beta1 != 0) {
-      line(-1/beta1 * height, -height, 1/beta1 * height, height);
-    } else {
-      line(-width, 0, width, 0);
-    }
-  
-
-    //black dashed lines
-    for (let i = -spacing1*25; i < spacing1*25; i = i + spacing1) {
-      if (box1.checked() == true) {
-        strokeWeight(0.3);
-        for (let dash = -width; dash < width; dash = dash + 12) {
-          line(dash, i + dash * beta1, dash + 6, i + beta1 * (dash + 6));
-          line(i + dash * beta1, 0 + dash, i + beta1 * (dash + 6), dash + 6);
-        }
+  //black dashed lines
+  stroke(0);
+  for (let i = -spacing1 * 25; i < spacing1 * 25; i = i + spacing1) {
+    if (box1.checked() == true) {
+      strokeWeight(0.3);
+      for (let dash = -width; dash < width; dash = dash + 12) {
+        line(dash, i + dash * beta1, dash + 6, i + beta1 * (dash + 6));
+        line(i + dash * beta1, 0 + dash, i + beta1 * (dash + 6), dash + 6);
       }
-      //black light signals
-      if (box3.checked() == true) {
-        strokeWeight(0.6);
-        stroke(0, 100, 0);
-        if (beta1 < beta2) {
-          line(
-            gamma1 * gamma1 * beta1 * i,
-            gamma1 * gamma1 * i,
-            gamma1 * gamma1 * beta1 * i + gamma1 * gamma1 * (beta2 - beta1) * i * (1 + beta2) * gamma2 * gamma2,
-            gamma1 * gamma1 * i + gamma1 * gamma1 * (beta2 - beta1) * i * (1 + beta2) * gamma2 * gamma2
-          );
-        } else {
-          line(
-            gamma1 * gamma1 * beta1 * i,
-            gamma1 * gamma1 * i,
-            gamma1 * gamma1 * beta1 * i +
-              gamma1 *
-              gamma1 *
-              (beta2 - beta1) *
-              i *
-              (1 - beta2) *
-              gamma2 *
-              gamma2,
-            gamma1 * gamma1 * i -
-              gamma1 *
-              gamma1 *
-              (beta2 - beta1) *
-              i *
-              (1 - beta2) *
-              gamma2 *
-              gamma2
-          );
-        }
+    }
+
+    if (box3.checked() == true) {
+      //black axes
+      stroke(0);
+      strokeWeight(1.5);
+      line(-beta1 * height, -height, beta1 * height, height);
+      if (beta1 != 0) {
+        line((-1 / beta1) * height, -height, (1 / beta1) * height, height);
+      } else {
+        line(-width, 0, width, 0);
       }
 
       //black time axis numbers
       push();
-        translate(gamma1 * gamma1 * beta1 * i, gamma1 * gamma1 * i);
-        scale(1, -1);
-        ellipse(0,0,4)
-        noStroke()
-        textAlign(CENTER, CENTER)
-        if ( i > 0.5 || i < -0.5)  {
-          text((i / spacing1).toFixed(0), -10, 0);
-        }
-        if ( gamma1 * gamma1 * i > height/2 + 45 && gamma1 * gamma1 * i < 2*height/3 -10) {
-          text('Time', -25, -36);
-        }
+      translate(gamma1 * gamma1 * beta1 * i, gamma1 * gamma1 * i);
+      scale(1, -1);
+      ellipse(0, 0, 4);
+      noStroke();
+      textAlign(CENTER, CENTER);
+      if (i > 0.5 || i < -0.5) {
+        text((i / spacing1).toFixed(0), -10, 0);
+      }
+      if (
+        gamma1 * gamma1 * i > height / 2 + 45 &&
+        gamma1 * gamma1 * i < (2 * height) / 3 - 10
+      ) {
+        text("Time", -25, -36);
+      }
       pop();
 
-    //black space axes numbers
+      //black space axes numbers
       push();
-        translate(gamma1 * gamma1 * i, gamma1 * gamma1 * i * beta1 );
-        scale(1, -1);
-        ellipse(0,0,4)
-        textSize(16);
-        noStroke();
-        if ( i > 0.5 || i < -0.5) {
-          text((i / spacing1).toFixed(0), 0, 15);
-        }
-        if ( gamma1 * gamma1 * i > 3*width/8 + 110 && gamma1 * gamma1 * i < width/2 -10) {
-          text('Position', -35, 40);
-        }
+      translate(gamma1 * gamma1 * i, gamma1 * gamma1 * i * beta1);
+      scale(1, -1);
+      ellipse(0, 0, 4);
+      textSize(16);
+      noStroke();
+      if (i > 0.5 || i < -0.5) {
+        text((i / spacing1).toFixed(0), 0, 15);
+      }
+      if (
+        gamma1 * gamma1 * i > (3 * width) / 8 + 110 &&
+        gamma1 * gamma1 * i < width / 2 - 10
+      ) {
+        text("Position", -35, 40);
+      }
       pop();
     }
+  }
 
-    //red axes
-    stroke(220, 0, 0);
-    strokeWeight(1.5);
-    line(-beta2 * height, -height, beta2 * height, height);
-    if ( beta2 != 0) {
-      line(-1/beta2 * height, -height, 1/beta2 * height, height);
-    } else {
-      line(-width, 0, width, 0);
-    }
+  if (box5.checked() == true) { 
+
+    push()
+    rotate(atan(beta1))
+    fill(200,200,200, 100)
+    rect(-width-200,0,2*(width+200),2*height)
+    pop();
+ 
+  }
 
   //red equitemps
-  for (let i = -spacing2*25; i < spacing2*25; i = i + spacing2) {
+  for (let i = -spacing2 * 25; i < spacing2 * 25; i = i + spacing2) {
     if (box2.checked() == true) {
-    stroke(220, 0, 0);
-     strokeWeight(0.3);
-     for (let dash = -width; dash < width; dash = dash + 12) {
-       line(dash, i + dash * beta2, dash + 6, i + beta2 * (dash + 6));
-       line(i + dash * beta2, 0 + dash, i + beta2 * (dash + 6), dash + 6);
-     }
-    
-    }
-
-    if (box4.checked() == true) {
-      strokeWeight(0.6);
-      stroke(0, 100, 0);
-      if (beta1 < beta2) {
-        line(
-          gamma2 * gamma2 * beta2 * i,
-          gamma2 * gamma2 * i,
-          gamma2 * gamma2 * beta2 * i -
-            gamma2 *
-              gamma2 *
-              (beta2 - beta1) *
-              i *
-              (1 - beta1) *
-              gamma1 *
-              gamma1,
-          gamma2 * gamma2 * i +
-            gamma2 *
-              gamma2 *
-              (beta2 - beta1) *
-              i *
-              (1 - beta1) *
-              gamma1 *
-              gamma1
-        );
-      } else {
-        line(
-          gamma2 * gamma2 * beta2 * i,
-          gamma2 * gamma2 * i,
-          gamma2 * gamma2 * beta2 * i -
-            gamma2 *
-              gamma2 *
-              (beta2 - beta1) *
-              i *
-              (1 + beta1) *
-              gamma1 *
-              gamma1,
-          gamma2 * gamma2 * i -
-            gamma2 *
-              gamma2 *
-              (beta2 - beta1) *
-              i *
-              (1 + beta1) *
-              gamma1 *
-              gamma1
-        );
+      stroke(220, 0, 0);
+      strokeWeight(0.3);
+      for (let dash = -width; dash < width; dash = dash + 12) {
+        line(dash, i + dash * beta2, dash + 6, i + beta2 * (dash + 6));
+        line(i + dash * beta2, 0 + dash, i + beta2 * (dash + 6), dash + 6);
       }
     }
 
-    strokeWeight(3);
-    stroke(200, 0, 0, 190);
-    fill(200, 0, 0, 190)
-    ellipse(gamma2 * gamma2 * beta2 * i, gamma2 * gamma2 * i, 2, 2);
-    textSize(16);
-    noStroke();
-    textAlign(CENTER, CENTER);
-
-   //red time axis numbers
-   push();
-   translate(gamma2 * gamma2 * beta2 * i, gamma2 * gamma2 * i);
-   scale(1, -1);
-   ellipse(0,0,4)
-   noStroke()
-   textAlign(CENTER, CENTER)
-   if ( i > 0.5 || i < -0.5)  {
-     text((i / spacing2).toFixed(0), -10, 0);
-   }
-   if ( gamma2 * gamma2 * i > height/2 + 55 && gamma2 * gamma2 * i < 2*height/3 -10) {
-     text('Time', -25, -16);
-   }
- pop();
-
-//red space axes numbers
- push();
-   translate(gamma2 * gamma2 * i, gamma2 * gamma2 * i * beta2 );
-   scale(1, -1);
-   ellipse(0,0,4)
-   textSize(16);
-   noStroke();
-   if ( i > 0.5 || i < -0.5) {
-     text((i / spacing2).toFixed(0), 0, 15);
-   }
-   if ( gamma2 * gamma2 * i > 3*width/8 + 110 && gamma2 * gamma2 * i < width/2 -10) {
-    text('Position', -95, 40);
+    if (box4.checked() == true) {
+        //red axes
+  stroke(220, 0, 0);
+  strokeWeight(1.5);
+  line(-beta2 * height, -height, beta2 * height, height);
+  if (beta2 != 0) {
+    line((-1 / beta2) * height, -height, (1 / beta2) * height, height);
+  } else {
+    line(-width, 0, width, 0);
   }
- pop();
+      strokeWeight(3);
+      stroke(200, 0, 0, 190);
+      fill(200, 0, 0, 190);
+      ellipse(gamma2 * gamma2 * beta2 * i, gamma2 * gamma2 * i, 2, 2);
+      textSize(16);
+      noStroke();
+      textAlign(CENTER, CENTER);
 
+      //red time axis numbers
+      push();
+      translate(gamma2 * gamma2 * beta2 * i, gamma2 * gamma2 * i);
+      scale(1, -1);
+      ellipse(0, 0, 4);
+      noStroke();
+      textAlign(CENTER, CENTER);
+      if (i > 0.5 || i < -0.5) {
+        text((i / spacing2).toFixed(0), -10, 0);
+      }
+      if (
+        gamma2 * gamma2 * i > height / 2 + 55 &&
+        gamma2 * gamma2 * i < (2 * height) / 3 - 10
+      ) {
+        text("Time", -25, -16);
+      }
+      pop();
 
-    
+      //red space axes numbers
+      push();
+      translate(gamma2 * gamma2 * i, gamma2 * gamma2 * i * beta2);
+      scale(1, -1);
+      ellipse(0, 0, 4);
+      textSize(16);
+      noStroke();
+      if (i > 0.5 || i < -0.5) {
+        text((i / spacing2).toFixed(0), 0, 15);
+      }
+      if (
+        gamma2 * gamma2 * i > (3 * width) / 8 + 110 &&
+        gamma2 * gamma2 * i < width / 2 - 10
+      ) {
+        text("Position", -95, 40);
+      }
+      pop();
+    }
   }
   pop();
   fill(255);
@@ -291,10 +232,10 @@ function draw() {
   fill(0);
   textSize(16);
   textAlign(CENTER);
-  text("Show \nGridlines", 336, height - 115);
-  text("Show \nAxes", 445, height - 115);
+  text("Show \nAxes", 336, height - 115);
+  text("Show \nGridlines", 445, height - 115);
   text("0", 204, height - 78);
-  text("-0.98c", 144,height - 78);
+  text("-0.98c", 144, height - 78);
 
   text("0.98c", 266, height - 78);
   strokeWeight(1);
@@ -313,10 +254,9 @@ function draw() {
   text("Velocity:", 40, height - 15);
 }
 
-
 function windowResized() {}
 
-function showModal(){
+function showModal() {
   modal.classList.add("visible");
 }
 
