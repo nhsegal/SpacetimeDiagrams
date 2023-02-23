@@ -12,10 +12,6 @@ let speedSlider2;
 let input1;
 let input2;
 let input3;
-let box1;
-let box2;
-let box3;
-let box4;
 let modalButton;
 let span;
 let lastBlackGridChoice;
@@ -43,12 +39,9 @@ function setup() {
   box4 = createCheckbox("", true);
   box5 = createCheckbox("", false);
   box6 = createCheckbox("", false);
-  /*
-  box1.changed(() => {
-    lastBlackGridChoice = box1.checked()
-    console.log(lastBlackGridChoice)
-  });
-  */
+  box7 = createCheckbox("", false);
+   
+
 
   box1.position(442, height - 64);
   box2.position(442, height - 22);
@@ -56,6 +49,7 @@ function setup() {
   box4.position(335, height - 22);
   box5.position(535, height - 64);
   box6.position(535, height - 22);
+  box7.position(15, height - 117);
 
   input1 = createInput("0");
   input1.parent("buttonPos");
@@ -76,6 +70,7 @@ function setup() {
 function draw() {
   background(255);
 
+ 
   //borders
   stroke(50);
   line(0, 0, 0, height);
@@ -86,6 +81,30 @@ function draw() {
   push();
   translate(width / 2, (2 * height) / 3);
   scale(1, -1);
+   if (box7.checked()){
+    stroke(0,70,230);
+    fill(0,70,230);
+    ellipse(2*spacing,2*spacing,10,10)
+    scale(1, -1);
+    text('A', 2*spacing-10,-2*spacing-10)
+    scale(1, -1);
+
+    ellipse(2*spacing,6*spacing,10,10)
+    scale(1, -1);
+    text('B', 2*spacing-10,-6*spacing-10)
+    scale(1, -1);
+
+    ellipse(-6*spacing,6*spacing,10,10)
+    scale(1, -1);
+    text('C', -6*spacing-10,-6*spacing-10)
+    scale(1, -1);
+
+    ellipse(-8*spacing,4*spacing,10,10)
+    scale(1, -1);
+    text('D', -8*spacing-10,-4*spacing-10)
+    scale(1, -1);
+  }
+
 
   //dotted lines for light cone
   stroke(0, 150, 0);
@@ -158,11 +177,7 @@ function draw() {
         text("Position", -35, 40);
       }
       pop();
-    } else {
-     // speedSlider.hide();
-     // input1.hide();
-     // box1.hide();
-    }
+    } 
   }
 
   if (box5.checked() == true) {
@@ -258,6 +273,7 @@ function draw() {
   text("Show \nAxes", 336, height - 115);
   text("Show \nGridlines", 445, height - 115);
   text("Show \nFuture", 535, height - 115);
+  text("Display Events", 85, height - 110);
   text("0", 204, height - 78);
   text("-0.98c", 144, height - 78);
 
@@ -289,6 +305,7 @@ function windowResized() {
   box4.position(335, height - 22);
   box5.position(535, height - 64);
   box6.position(535, height - 22);
+  box7.position(35, height - 22);
   input1.position(84, height - 63);
   input2.position(84, height - 23);
 }
