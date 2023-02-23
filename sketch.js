@@ -152,8 +152,8 @@ function draw() {
         if ( i > 0.5 || i < -0.5)  {
           text((i / spacing1).toFixed(0), -10, 0);
         }
-        if ( gamma1 * gamma1 * i > height/2 + 30 && gamma1 * gamma1 * i < 2*height/3 -10) {
-          text('Time', -25, -16);
+        if ( gamma1 * gamma1 * i > height/2 + 45 && gamma1 * gamma1 * i < 2*height/3 -10) {
+          text('Time', -25, -36);
         }
       pop();
 
@@ -167,14 +167,21 @@ function draw() {
         if ( i > 0.5 || i < -0.5) {
           text((i / spacing1).toFixed(0), 0, 15);
         }
+        if ( gamma1 * gamma1 * i > 3*width/8 + 110 && gamma1 * gamma1 * i < width/2 -10) {
+          text('Position', -35, 40);
+        }
       pop();
     }
 
     //red axes
     stroke(220, 0, 0);
     strokeWeight(1.5);
-    line(-beta2 * height/2, -height/2, beta2 * height, height);
-    line(-height/2, -beta2 * height/2, height, beta2 * height);
+    line(-beta2 * height, -height, beta2 * height, height);
+    if ( beta2 != 0) {
+      line(-1/beta2 * height, -height, 1/beta2 * height, height);
+    } else {
+      line(-width, 0, width, 0);
+    }
 
   //red equitemps
   for (let i = -spacing2*25; i < spacing2*25; i = i + spacing2) {
@@ -244,11 +251,38 @@ function draw() {
     noStroke();
     textAlign(CENTER, CENTER);
 
-    push();
-    translate(gamma2 * gamma2 * beta2 * i, gamma2 * gamma2 * i);
-    scale(1, -1);
-    text((i / spacing2).toFixed(0), -10, 0);
-    pop();
+   //red time axis numbers
+   push();
+   translate(gamma2 * gamma2 * beta2 * i, gamma2 * gamma2 * i);
+   scale(1, -1);
+   ellipse(0,0,4)
+   noStroke()
+   textAlign(CENTER, CENTER)
+   if ( i > 0.5 || i < -0.5)  {
+     text((i / spacing2).toFixed(0), -10, 0);
+   }
+   if ( gamma2 * gamma2 * i > height/2 + 55 && gamma2 * gamma2 * i < 2*height/3 -10) {
+     text('Time', -25, -16);
+   }
+ pop();
+
+//red space axes numbers
+ push();
+   translate(gamma2 * gamma2 * i, gamma2 * gamma2 * i * beta2 );
+   scale(1, -1);
+   ellipse(0,0,4)
+   textSize(16);
+   noStroke();
+   if ( i > 0.5 || i < -0.5) {
+     text((i / spacing2).toFixed(0), 0, 15);
+   }
+   if ( gamma2 * gamma2 * i > 3*width/8 + 110 && gamma2 * gamma2 * i < width/2 -10) {
+    text('Position', -95, 40);
+  }
+ pop();
+
+
+    
   }
   pop();
   fill(255);
@@ -258,7 +292,7 @@ function draw() {
   textSize(16);
   textAlign(CENTER);
   text("Show \nGridlines", 336, height - 115);
-  text("Send Light \nSignals", 445, height - 115);
+  text("Show \nAxes", 445, height - 115);
   text("0", 204, height - 78);
   text("-0.98c", 144,height - 78);
 
