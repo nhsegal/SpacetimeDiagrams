@@ -40,7 +40,9 @@ function setup() {
   blackFutureCheckbox = createCheckbox("", false);
   redFutureCheckbox = createCheckbox("", false);
   drawEventsBox = createCheckbox("", false);
-   
+  drawBarnBox = createCheckbox("", false);
+  drawPoleBox = createCheckbox("", false);
+
 
   blackGridCheckbox.position(442, height - 64);
   redGridCheckbox.position(442, height - 22);
@@ -49,6 +51,8 @@ function setup() {
   blackFutureCheckbox.position(535, height - 64);
   redFutureCheckbox.position(535, height - 22);
   drawEventsBox.position(15, height - 117);
+  drawBarnBox.position(625, height - 64);
+  drawPoleBox.position(625, height - 22);
 
   input1 = createInput("0");
   input1.parent("buttonPos");
@@ -74,25 +78,34 @@ function draw() {
   translate(width / 2, (2 * height) / 3);
   scale(1, -1);
   if (drawEventsBox.checked()) {
-    drawEvents()
+    drawEvents();
   }
 
   drawLightCone();
 
+  if (drawBarnBox.checked()){
+    drawBarn(0, 1 * gamma1 * gamma1, spacing1 * 5);
+  }
+  if (drawPoleBox.checked()){
+    drawPole(-2.5* spacing2, 1 * gamma2 * gamma2, spacing2 * 5);
+  }
+
   for (let i = -spacing1 * 25; i < spacing1 * 25; i = i + spacing1) {
     if (blackGridCheckbox.checked() == true) {
-     drawBlackGridline(i);
+      drawBlackGridline(i);
     }
     if (blackAxesCheckbox.checked() == true) {
       drawBlackAxes(i);
-    } 
+    }
+   
   }
-
+ 
   if (blackFutureCheckbox.checked() == true) {
-   showBlackFuture();
+    showBlackFuture();
   }
 
-  //red equitemps
+  //red
+  
   for (let i = -spacing2 * 25; i < spacing2 * 25; i = i + spacing2) {
     if (redGridCheckbox.checked() == true) {
       drawRedGridline(i);
@@ -101,10 +114,11 @@ function draw() {
     if (redAxesCheckbox.checked() == true) {
       drawRedAxes(i);
     }
+
   }
 
   if (redFutureCheckbox.checked() == true) {
-   drawRedFuture();
+    drawRedFuture();
   }
 
   pop();
@@ -146,32 +160,32 @@ function setSpeed2() {
 }
 
 function drawEvents() {
-    stroke(0,70,230);
-    fill(0,70,230);
-    ellipse(2*spacing,2*spacing,10,10)
-    scale(1, -1);
-    text('A', 2*spacing-10,-2*spacing-10)
-    scale(1, -1);
+  stroke(0, 70, 230);
+  fill(0, 70, 230);
+  ellipse(2 * spacing, 2 * spacing, 10, 10);
+  scale(1, -1);
+  text("A", 2 * spacing - 10, -2 * spacing - 10);
+  scale(1, -1);
 
-    ellipse(2*spacing,6*spacing,10,10)
-    scale(1, -1);
-    text('B', 2*spacing-10,-6*spacing-10)
-    scale(1, -1);
+  ellipse(2 * spacing, 6 * spacing, 10, 10);
+  scale(1, -1);
+  text("B", 2 * spacing - 10, -6 * spacing - 10);
+  scale(1, -1);
 
-    ellipse(-6*spacing,6*spacing,10,10)
-    scale(1, -1);
-    text('C', -6*spacing-10,-6*spacing-10)
-    scale(1, -1);
+  ellipse(-6 * spacing, 6 * spacing, 10, 10);
+  scale(1, -1);
+  text("C", -6 * spacing - 10, -6 * spacing - 10);
+  scale(1, -1);
 
-    ellipse(-8*spacing,4*spacing,10,10)
-    scale(1, -1);
-    text('D', -8*spacing-10,-4*spacing-10)
-    scale(1, -1);
+  ellipse(-8 * spacing, 4 * spacing, 10, 10);
+  scale(1, -1);
+  text("D", -8 * spacing - 10, -4 * spacing - 10);
+  scale(1, -1);
 
-    ellipse(0,8*spacing,10,10)
-    scale(1, -1);
-    text('E', -10,-8*spacing-10)
-    scale(1, -1);
+  ellipse(0, 8 * spacing, 10, 10);
+  scale(1, -1);
+  text("E", -10, -8 * spacing - 10);
+  scale(1, -1);
 }
 
 function drawLightCone() {
@@ -185,7 +199,7 @@ function drawLightCone() {
 }
 
 function drawBlackGridline(i) {
-  stroke(0)
+  stroke(0);
   strokeWeight(0.3);
   for (let dash = -width; dash < width; dash = dash + 12) {
     line(dash, i + dash * beta1, dash + 6, i + beta1 * (dash + 6));
@@ -193,56 +207,59 @@ function drawBlackGridline(i) {
   }
 }
 
-function drawBlackAxes(i){
-      //black axes
-      stroke(0);
-      strokeWeight(1.5);
-      line(-beta1 * height, -height, beta1 * height, height);
-      if (beta1 != 0) {
-        line((-1 / beta1) * height, -height, (1 / beta1) * height, height);
-      } else {
-        line(-width, 0, width, 0);
-      }
+function drawBlackAxes(i) {
+  //black axes
+  stroke(0);
+  strokeWeight(1.5);
+  line(-beta1 * height, -height, beta1 * height, height);
+  if (beta1 != 0) {
+    line((-1 / beta1) * height, -height, (1 / beta1) * height, height);
+  } else {
+    line(-width, 0, width, 0);
+  }
 
-      //black time axis numbers
-      push();
-      translate(gamma1 * gamma1 * beta1 * i, gamma1 * gamma1 * i);
-      scale(1, -1);
-      ellipse(0, 0, 4);
-      noStroke();
-      textAlign(CENTER, CENTER);
-      if (i > 0.5 || i < -0.5) {
-        text((i / spacing1).toFixed(0), -10, 0);
-      }
-      if (
-        gamma1 * gamma1 * i > height / 2 + 5 &&
-        gamma1 * gamma1 * i < (2 * height) / 3 - 75
-      ) {
-        text("Time", -25, -64);
-      }
-      pop();
+  //black time axis numbers
+  push();
+  translate(gamma1 * gamma1 * beta1 * i, gamma1 * gamma1 * i);
+  scale(1, -1);
+  ellipse(0, 0, 4);
+  noStroke();
+  fill(0);
+  textAlign(CENTER, CENTER);
+  if (i > 0.5 || i < -0.5) {
+    text((i / spacing1).toFixed(0), -10, 0);
+  }
+  if (
+    gamma1 * gamma1 * i > height / 2 + 5 &&
+    gamma1 * gamma1 * i < (2 * height) / 3 - 75
+  ) {
+    text("Time", -25, -64);
+  }
+  pop();
 
-      //black space axes numbers
-      push();
-      translate(gamma1 * gamma1 * i, gamma1 * gamma1 * i * beta1);
-      scale(1, -1);
-      ellipse(0, 0, 4);
-      textSize(16);
-      noStroke();
-      if (i > 0.5 || i < -0.5) {
-        text((i / spacing1).toFixed(0), 0, 15);
-      }
-      if (
-        gamma1 * gamma1 * i > (3 * width) / 8 + 110 &&
-        gamma1 * gamma1 * i < width / 2 - 10
-      ) {
-        text("Position", -35, 40);
-      }
-      pop();
-    
+  //black space axes numbers
+  push();
+  translate(gamma1 * gamma1 * i, gamma1 * gamma1 * i * beta1);
+  scale(1, -1);
+  ellipse(0, 0, 4);
+  textSize(16);
+  noStroke();
+  fill(0);
+  if (i > 0.5 || i < -0.5) {
+    text((i / spacing1).toFixed(0), 0, 15);
+  }
+  if (
+    gamma1 * gamma1 * i > (3 * width) / 8 + 110 &&
+    gamma1 * gamma1 * i < width / 2 - 10
+  ) {
+    text("Position", -35, 40);
+  }
+  pop();
 }
 
 function showBlackFuture() {
+  stroke(0)
+  strokeWeight(1)
   push();
   rotate(atan(beta1));
   fill(200, 200, 200, 100);
@@ -260,58 +277,58 @@ function drawRedGridline(i) {
 }
 
 function drawRedAxes(i) {
-    //red axes
-    stroke(220, 0, 0);
-    strokeWeight(1.5);
-    line(-beta2 * height, -height, beta2 * height, height);
-    if (beta2 != 0) {
-      line((-1 / beta2) * height, -height, (1 / beta2) * height, height);
-    } else {
-      line(-width, 0, width, 0);
-    }
-    strokeWeight(3);
-    stroke(200, 0, 0, 190);
-    fill(200, 0, 0, 190);
-    ellipse(gamma2 * gamma2 * beta2 * i, gamma2 * gamma2 * i, 2, 2);
-    textSize(16);
-    noStroke();
-    textAlign(CENTER, CENTER);
+  //red axes
+  stroke(200, 0, 0, 190);
+  strokeWeight(1.5);
+  line(-beta2 * height, -height, beta2 * height, height);
+  if (beta2 != 0) {
+    line((-1 / beta2) * height, -height, (1 / beta2) * height, height);
+  } else {
+    line(-width, 0, width, 0);
+  }
+  strokeWeight(3);
+  stroke(200, 0, 0, 190);
+  fill(200, 0, 0, 190);
+  ellipse(gamma2 * gamma2 * beta2 * i, gamma2 * gamma2 * i, 2, 2);
+  textSize(16);
+  noStroke();
+  textAlign(CENTER, CENTER);
 
-    //red time axis numbers
-    push();
-    translate(gamma2 * gamma2 * beta2 * i, gamma2 * gamma2 * i);
-    scale(1, -1);
-    ellipse(0, 0, 4);
-    noStroke();
-    textAlign(CENTER, CENTER);
-    if (i > 0.5 || i < -0.5) {
-      text((i / spacing2).toFixed(0), -10, 0);
-    }
-    if (
-      gamma2 * gamma2 * i > height / 2 + 20 &&
-      gamma2 * gamma2 * i < (2 * height) / 3 - 10
-    ) {
-      text("Time", -25, -36);
-    }
-    pop();
+  //red time axis numbers
+  push();
+  translate(gamma2 * gamma2 * beta2 * i, gamma2 * gamma2 * i);
+  scale(1, -1);
+  ellipse(0, 0, 4);
+  noStroke();
+  textAlign(CENTER, CENTER);
+  if (i > 0.5 || i < -0.5) {
+    text((i / spacing2).toFixed(0), -10, 0);
+  }
+  if (
+    gamma2 * gamma2 * i > height / 2 + 20 &&
+    gamma2 * gamma2 * i < (2 * height) / 3 - 10
+  ) {
+    text("Time", -25, -36);
+  }
+  pop();
 
-    //red space axes numbers
-    push();
-    translate(gamma2 * gamma2 * i, gamma2 * gamma2 * i * beta2);
-    scale(1, -1);
-    ellipse(0, 0, 4);
-    textSize(16);
-    noStroke();
-    if (i > 0.5 || i < -0.5) {
-      text((i / spacing2).toFixed(0), 0, 10);
-    }
-    if (
-      gamma2 * gamma2 * i > (3 * width) / 8 + 110 &&
-      gamma2 * gamma2 * i < width / 2 - 10
-    ) {
-      text("Position", -95, 35);
-    }
-    pop();
+  //red space axes numbers
+  push();
+  translate(gamma2 * gamma2 * i, gamma2 * gamma2 * i * beta2);
+  scale(1, -1);
+  ellipse(0, 0, 4);
+  textSize(16);
+  noStroke();
+  if (i > 0.5 || i < -0.5) {
+    text((i / spacing2).toFixed(0), 0, 10);
+  }
+  if (
+    gamma2 * gamma2 * i > (3 * width) / 8 + 110 &&
+    gamma2 * gamma2 * i < width / 2 - 10
+  ) {
+    text("Position", -95, 35);
+  }
+  pop();
 }
 
 function drawRedFuture() {
@@ -322,7 +339,7 @@ function drawRedFuture() {
   pop();
 }
 
-function drawControls(){
+function drawControls() {
   fill(255);
   rect(5, height - 136, width - 5, 136);
   fill(0);
@@ -331,6 +348,7 @@ function drawControls(){
   text("Show \nAxes", 336, height - 115);
   text("Show \nGridlines", 445, height - 115);
   text("Show \nFuture", 535, height - 115);
+  text("Show \nBarn/Pole", 625, height - 115);
   text("Display Events", 85, height - 110);
   text("0", 204, height - 78);
   text("-0.98c", 144, height - 78);
@@ -347,4 +365,26 @@ function drawControls(){
   stroke(220, 0, 0);
   fill(220, 0, 0);
   text("Velocity:", 40, height - 15);
+}
+
+function drawBarn(x, y, w) {
+  push();
+  shearX(atan(beta1));
+  //rectMode(CENTER);
+  noStroke();
+  fill(200, 200, 200, 100);
+
+  rect(x, -200, w, height*2);
+ 
+  pop();
+}
+
+function drawPole(x, y, w) {
+  push();
+  shearX(atan(beta2));
+  rectMode(CENTER);
+  noStroke();
+  fill(200, 100, 100, 100);
+  rect(x, y, w, height*2);
+  pop();
 }
