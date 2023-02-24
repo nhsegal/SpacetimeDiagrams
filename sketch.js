@@ -33,23 +33,22 @@ function setup() {
   modalButton.position(width - 168, height - 16);
   modalButton.mousePressed(showModal);
 
-  box1 = createCheckbox("", true);
-  box2 = createCheckbox("", false);
-  box3 = createCheckbox("", true);
-  box4 = createCheckbox("", true);
-  box5 = createCheckbox("", false);
-  box6 = createCheckbox("", false);
-  box7 = createCheckbox("", false);
+  blackGridCheckbox = createCheckbox("", true);
+  redGridCheckbox = createCheckbox("", false);
+  blackAxesCheckbox = createCheckbox("", true);
+  redAxesCheckbox = createCheckbox("", true);
+  blackFutureCheckbox = createCheckbox("", false);
+  redFutureCheckbox = createCheckbox("", false);
+  drawEventsBox = createCheckbox("", false);
    
 
-
-  box1.position(442, height - 64);
-  box2.position(442, height - 22);
-  box3.position(335, height - 64);
-  box4.position(335, height - 22);
-  box5.position(535, height - 64);
-  box6.position(535, height - 22);
-  box7.position(15, height - 117);
+  blackGridCheckbox.position(442, height - 64);
+  redGridCheckbox.position(442, height - 22);
+  blackAxesCheckbox.position(335, height - 64);
+  redAxesCheckbox.position(335, height - 22);
+  blackFutureCheckbox.position(535, height - 64);
+  redFutureCheckbox.position(535, height - 22);
+  drawEventsBox.position(15, height - 117);
 
   input1 = createInput("0");
   input1.parent("buttonPos");
@@ -69,19 +68,84 @@ function setup() {
 
 function draw() {
   background(255);
-
- 
-  //borders
   stroke(50);
-  line(0, 0, 0, height);
-  line(0, height, 0, height);
-  line(width, 0, width, height);
-  line(width, height, 0, height);
 
   push();
   translate(width / 2, (2 * height) / 3);
   scale(1, -1);
-   if (box7.checked()){
+  if (drawEventsBox.checked()) {
+    drawEvents()
+  }
+
+  drawLightCone();
+
+  for (let i = -spacing1 * 25; i < spacing1 * 25; i = i + spacing1) {
+    if (blackGridCheckbox.checked() == true) {
+     drawBlackGridline(i);
+    }
+    if (blackAxesCheckbox.checked() == true) {
+      drawBlackAxes(i);
+    } 
+  }
+
+  if (blackFutureCheckbox.checked() == true) {
+   showBlackFuture();
+  }
+
+  //red equitemps
+  for (let i = -spacing2 * 25; i < spacing2 * 25; i = i + spacing2) {
+    if (redGridCheckbox.checked() == true) {
+      drawRedGridline(i);
+    }
+
+    if (redAxesCheckbox.checked() == true) {
+      drawRedAxes(i);
+    }
+  }
+
+  if (redFutureCheckbox.checked() == true) {
+   drawRedFuture();
+  }
+
+  pop();
+  drawControls();
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight - 30);
+  speedSlider.position(145, height - 63);
+  speedSlider2.position(145, height - 23);
+  modalButton.position(width - 168, height - 16);
+  blackGridCheckbox.position(442, height - 64);
+  redGridCheckbox.position(442, height - 22);
+  blackAxesCheckbox.position(335, height - 64);
+  redAxesCheckbox.position(335, height - 22);
+  blackFutureCheckbox.position(535, height - 64);
+  redFutureCheckbox.position(535, height - 22);
+  drawEventsBox.position(15, height - 117);
+  input1.position(84, height - 63);
+  input2.position(84, height - 23);
+}
+
+function showModal() {
+  modal.classList.add("visible");
+}
+
+function setSpeed1() {
+  beta1 = speedSlider.value() / 200;
+  gamma1 = 1 / Math.sqrt(1 - beta1 * beta1);
+  spacing1 = spacing / gamma1;
+  input1.value(beta1);
+}
+
+function setSpeed2() {
+  beta2 = speedSlider2.value() / 200;
+  gamma2 = 1 / Math.sqrt(1 - beta2 * beta2);
+  spacing2 = spacing / gamma2;
+  input2.value(beta2);
+}
+
+function drawEvents() {
     stroke(0,70,230);
     fill(0,70,230);
     ellipse(2*spacing,2*spacing,10,10)
@@ -108,10 +172,9 @@ function draw() {
     scale(1, -1);
     text('E', -10,-8*spacing-10)
     scale(1, -1);
-  }
+}
 
-
-  //dotted lines for light cone
+function drawLightCone() {
   stroke(0, 150, 0);
   strokeWeight(2.5);
   fill(0);
@@ -119,20 +182,18 @@ function draw() {
     line(i, i, i + 7, i + 7);
     line(-i, i, -i - 7, i + 7);
   }
+}
 
-  //black dashed lines
-  stroke(0);
-  for (let i = -spacing1 * 25; i < spacing1 * 25; i = i + spacing1) {
-    if (box1.checked() == true) {
-      strokeWeight(0.3);
-      for (let dash = -width; dash < width; dash = dash + 12) {
-        line(dash, i + dash * beta1, dash + 6, i + beta1 * (dash + 6));
-        line(i + dash * beta1, 0 + dash, i + beta1 * (dash + 6), dash + 6);
-      }
-    }
+function drawBlackGridline(i) {
+  stroke(0)
+  strokeWeight(0.3);
+  for (let dash = -width; dash < width; dash = dash + 12) {
+    line(dash, i + dash * beta1, dash + 6, i + beta1 * (dash + 6));
+    line(i + dash * beta1, 0 + dash, i + beta1 * (dash + 6), dash + 6);
+  }
+}
 
-    if (box3.checked() == true) {
-   
+function drawBlackAxes(i){
       //black axes
       stroke(0);
       strokeWeight(1.5);
@@ -154,7 +215,7 @@ function draw() {
         text((i / spacing1).toFixed(0), -10, 0);
       }
       if (
-        gamma1 * gamma1 * i > height / 2 + 15 &&
+        gamma1 * gamma1 * i > height / 2 + 5 &&
         gamma1 * gamma1 * i < (2 * height) / 3 - 75
       ) {
         text("Time", -25, -64);
@@ -178,95 +239,91 @@ function draw() {
         text("Position", -35, 40);
       }
       pop();
-    } 
-  }
+    
+}
 
-  if (box5.checked() == true) {
-    push();
-    rotate(atan(beta1));
-    fill(200, 200, 200, 100);
-    rect(-width - 200, 0, 2 * (width + 200), 2 * height);
-    pop();
-  }
-
-  //red equitemps
-  for (let i = -spacing2 * 25; i < spacing2 * 25; i = i + spacing2) {
-    if (box2.checked() == true) {
-      stroke(220, 0, 0);
-      strokeWeight(0.3);
-      for (let dash = -width; dash < width; dash = dash + 12) {
-        line(dash, i + dash * beta2, dash + 6, i + beta2 * (dash + 6));
-        line(i + dash * beta2, 0 + dash, i + beta2 * (dash + 6), dash + 6);
-      }
-    }
-
-    if (box4.checked() == true) {
-      //red axes
-      stroke(220, 0, 0);
-      strokeWeight(1.5);
-      line(-beta2 * height, -height, beta2 * height, height);
-      if (beta2 != 0) {
-        line((-1 / beta2) * height, -height, (1 / beta2) * height, height);
-      } else {
-        line(-width, 0, width, 0);
-      }
-      strokeWeight(3);
-      stroke(200, 0, 0, 190);
-      fill(200, 0, 0, 190);
-      ellipse(gamma2 * gamma2 * beta2 * i, gamma2 * gamma2 * i, 2, 2);
-      textSize(16);
-      noStroke();
-      textAlign(CENTER, CENTER);
-
-      //red time axis numbers
-      push();
-      translate(gamma2 * gamma2 * beta2 * i, gamma2 * gamma2 * i);
-      scale(1, -1);
-      ellipse(0, 0, 4);
-      noStroke();
-      textAlign(CENTER, CENTER);
-      if (i > 0.5 || i < -0.5) {
-        text((i / spacing2).toFixed(0), -10, 0);
-      }
-      if (
-        gamma2 * gamma2 * i > height / 2 + 40 &&
-        gamma2 * gamma2 * i < (2 * height) / 3 - 10
-      ) {
-        text("Time", -25, -36);
-      }
-      pop();
-
-      //red space axes numbers
-      push();
-      translate(gamma2 * gamma2 * i, gamma2 * gamma2 * i * beta2);
-      scale(1, -1);
-      ellipse(0, 0, 4);
-      textSize(16);
-      noStroke();
-      if (i > 0.5 || i < -0.5) {
-        text((i / spacing2).toFixed(0), 0, 10);
-      }
-      if (
-        gamma2 * gamma2 * i > (3 * width) / 8 + 110 &&
-        gamma2 * gamma2 * i < width / 2 - 10
-      ) {
-        text("Position", -95, 35);
-      }
-      pop();
-    }
-  }
-
-  if (box6.checked() == true) {
-    push();
-    rotate(atan(beta2));
-    fill(250, 200, 200, 100);
-    rect(-width - 200, 0, 2 * (width + 200), 2 * height);
-    pop();
-  }
-
+function showBlackFuture() {
+  push();
+  rotate(atan(beta1));
+  fill(200, 200, 200, 100);
+  rect(-width - 200, 0, 2 * (width + 200), 2 * height);
   pop();
-  fill(255);
+}
 
+function drawRedGridline(i) {
+  stroke(220, 0, 0);
+  strokeWeight(0.3);
+  for (let dash = -width; dash < width; dash = dash + 12) {
+    line(dash, i + dash * beta2, dash + 6, i + beta2 * (dash + 6));
+    line(i + dash * beta2, 0 + dash, i + beta2 * (dash + 6), dash + 6);
+  }
+}
+
+function drawRedAxes(i) {
+    //red axes
+    stroke(220, 0, 0);
+    strokeWeight(1.5);
+    line(-beta2 * height, -height, beta2 * height, height);
+    if (beta2 != 0) {
+      line((-1 / beta2) * height, -height, (1 / beta2) * height, height);
+    } else {
+      line(-width, 0, width, 0);
+    }
+    strokeWeight(3);
+    stroke(200, 0, 0, 190);
+    fill(200, 0, 0, 190);
+    ellipse(gamma2 * gamma2 * beta2 * i, gamma2 * gamma2 * i, 2, 2);
+    textSize(16);
+    noStroke();
+    textAlign(CENTER, CENTER);
+
+    //red time axis numbers
+    push();
+    translate(gamma2 * gamma2 * beta2 * i, gamma2 * gamma2 * i);
+    scale(1, -1);
+    ellipse(0, 0, 4);
+    noStroke();
+    textAlign(CENTER, CENTER);
+    if (i > 0.5 || i < -0.5) {
+      text((i / spacing2).toFixed(0), -10, 0);
+    }
+    if (
+      gamma2 * gamma2 * i > height / 2 + 20 &&
+      gamma2 * gamma2 * i < (2 * height) / 3 - 10
+    ) {
+      text("Time", -25, -36);
+    }
+    pop();
+
+    //red space axes numbers
+    push();
+    translate(gamma2 * gamma2 * i, gamma2 * gamma2 * i * beta2);
+    scale(1, -1);
+    ellipse(0, 0, 4);
+    textSize(16);
+    noStroke();
+    if (i > 0.5 || i < -0.5) {
+      text((i / spacing2).toFixed(0), 0, 10);
+    }
+    if (
+      gamma2 * gamma2 * i > (3 * width) / 8 + 110 &&
+      gamma2 * gamma2 * i < width / 2 - 10
+    ) {
+      text("Position", -95, 35);
+    }
+    pop();
+}
+
+function drawRedFuture() {
+  push();
+  rotate(atan(beta2));
+  fill(250, 200, 200, 100);
+  rect(-width - 200, 0, 2 * (width + 200), 2 * height);
+  pop();
+}
+
+function drawControls(){
+  fill(255);
   rect(5, height - 136, width - 5, 136);
   fill(0);
   textSize(16);
@@ -277,54 +334,17 @@ function draw() {
   text("Display Events", 85, height - 110);
   text("0", 204, height - 78);
   text("-0.98c", 144, height - 78);
-
   text("0.98c", 266, height - 78);
   strokeWeight(1);
   line(204, height - 70, 204, height - 52);
   line(145, height - 70, 145, height - 52);
   line(264, height - 70, 264, height - 52);
-
   line(204, height - 30, 204, height - 12);
   line(145, height - 30, 145, height - 12);
   line(264, height - 30, 264, height - 12);
-
   strokeWeight(0.25);
   text("Velocity:", 40, height - 55);
   stroke(220, 0, 0);
   fill(220, 0, 0);
   text("Velocity:", 40, height - 15);
-}
-
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight - 30);
-  speedSlider.position(145, height - 63);
-  speedSlider2.position(145, height - 23);
-  modalButton.position(width - 168, height - 16);
-  box1.position(442, height - 64);
-  box2.position(442, height - 22);
-  box3.position(335, height - 64);
-  box4.position(335, height - 22);
-  box5.position(535, height - 64);
-  box6.position(535, height - 22);
-  box7.position(15, height - 117);
-  input1.position(84, height - 63);
-  input2.position(84, height - 23);
-}
-
-function showModal() {
-  modal.classList.add("visible");
-}
-
-function setSpeed1() {
-  beta1 = speedSlider.value() / 200;
-  gamma1 = 1 / Math.sqrt(1 - beta1 * beta1);
-  spacing1 = spacing / gamma1;
-  input1.value(beta1);
-}
-
-function setSpeed2() {
-  beta2 = speedSlider2.value() / 200;
-  gamma2 = 1 / Math.sqrt(1 - beta2 * beta2);
-  spacing2 = spacing / gamma2;
-  input2.value(beta2);
 }
