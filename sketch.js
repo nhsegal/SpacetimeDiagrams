@@ -33,8 +33,10 @@ function setup() {
   modalButton.position(width - 168, height - 16);
   modalButton.mousePressed(showModal);
 
-  blackGridCheckbox = createCheckbox("", true);
-  redGridCheckbox = createCheckbox("", false);
+  blackGridCheckbox1 = createCheckbox("", true);
+  blackGridCheckbox2 = createCheckbox("", true);
+  redGridCheckbox1 = createCheckbox("", false);
+  redGridCheckbox2 = createCheckbox("", false);
   blackAxesCheckbox = createCheckbox("", true);
   redAxesCheckbox = createCheckbox("", true);
   blackFutureCheckbox = createCheckbox("", false);
@@ -44,8 +46,10 @@ function setup() {
   drawPoleBox = createCheckbox("", false);
 
 
-  blackGridCheckbox.position(442, height - 64);
-  redGridCheckbox.position(442, height - 22);
+  blackGridCheckbox1.position(432, height - 64);
+  blackGridCheckbox2.position(450, height - 64);
+  redGridCheckbox1.position(432, height - 22);
+  redGridCheckbox2.position(450, height - 22);
   blackAxesCheckbox.position(335, height - 64);
   redAxesCheckbox.position(335, height - 22);
   blackFutureCheckbox.position(535, height - 64);
@@ -91,8 +95,11 @@ function draw() {
   }
 
   for (let i = -spacing1 * 25; i < spacing1 * 25; i = i + spacing1) {
-    if (blackGridCheckbox.checked() == true) {
-      drawBlackGridline(i);
+    if (blackGridCheckbox1.checked() == true) {
+      drawBlackGridline1(i);
+    }
+    if (blackGridCheckbox2.checked() == true) {
+      drawBlackGridline2(i);
     }
     if (blackAxesCheckbox.checked() == true) {
       drawBlackAxes(i);
@@ -107,10 +114,12 @@ function draw() {
   //red
   
   for (let i = -spacing2 * 25; i < spacing2 * 25; i = i + spacing2) {
-    if (redGridCheckbox.checked() == true) {
-      drawRedGridline(i);
+    if (redGridCheckbox1.checked() == true) {
+      drawRedGridline1(i);
     }
-
+    if (redGridCheckbox2.checked() == true) {
+      drawRedGridline2(i);
+    }
     if (redAxesCheckbox.checked() == true) {
       drawRedAxes(i);
     }
@@ -130,13 +139,17 @@ function windowResized() {
   speedSlider.position(145, height - 63);
   speedSlider2.position(145, height - 23);
   modalButton.position(width - 168, height - 16);
-  blackGridCheckbox.position(442, height - 64);
-  redGridCheckbox.position(442, height - 22);
+  blackGridCheckbox1.position(432, height - 64);
+  blackGridCheckbox2.position(450, height - 64);
+  redGridCheckbox1.position(432, height - 22);
+  redGridCheckbox2.position(450, height - 22);
   blackAxesCheckbox.position(335, height - 64);
   redAxesCheckbox.position(335, height - 22);
   blackFutureCheckbox.position(535, height - 64);
   redFutureCheckbox.position(535, height - 22);
   drawEventsBox.position(15, height - 117);
+  drawBarnBox.position(625, height - 64);
+  drawPoleBox.position(625, height - 22);
   input1.position(84, height - 63);
   input2.position(84, height - 23);
 }
@@ -198,14 +211,24 @@ function drawLightCone() {
   }
 }
 
-function drawBlackGridline(i) {
+function drawBlackGridline1(i) {
   stroke(0);
-  strokeWeight(0.3);
-  for (let dash = -width; dash < width; dash = dash + 12) {
+  strokeWeight(0.4);
+  for (let dash = -width; dash < width; dash = dash + 9) {
     line(dash, i + dash * beta1, dash + 6, i + beta1 * (dash + 6));
+    //line(i + dash * beta1, 0 + dash, i + beta1 * (dash + 6), dash + 6);
+  }
+}
+
+function drawBlackGridline2(i) {
+  stroke(0);
+  strokeWeight(0.4);
+  for (let dash = -width; dash < width; dash = dash + 9) {
+   // line(dash, i + dash * beta1, dash + 6, i + beta1 * (dash + 6));
     line(i + dash * beta1, 0 + dash, i + beta1 * (dash + 6), dash + 6);
   }
 }
+
 
 function drawBlackAxes(i) {
   //black axes
@@ -230,10 +253,10 @@ function drawBlackAxes(i) {
     text((i / spacing1).toFixed(0), -10, 0);
   }
   if (
-    gamma1 * gamma1 * i > height / 2 + 5 &&
-    gamma1 * gamma1 * i < (2 * height) / 3 - 75
+    gamma1 * gamma1 * i > 4.5 * height / 8  &&
+    gamma1 * gamma1 * i < (2 * height) / 3 
   ) {
-    text("Time", -25, -64);
+    text("Time", -25, 22);
   }
   pop();
 
@@ -267,15 +290,22 @@ function showBlackFuture() {
   pop();
 }
 
-function drawRedGridline(i) {
+function drawRedGridline1(i) {
   stroke(220, 0, 0);
-  strokeWeight(0.3);
-  for (let dash = -width; dash < width; dash = dash + 12) {
+  strokeWeight(0.4);
+  for (let dash = -width; dash < width; dash = dash + 9) {
     line(dash, i + dash * beta2, dash + 6, i + beta2 * (dash + 6));
+    //line(i + dash * beta2, 0 + dash, i + beta2 * (dash + 6), dash + 6);
+  }
+}
+function drawRedGridline2(i) {
+  stroke(220, 0, 0);
+  strokeWeight(0.4);
+  for (let dash = -width; dash < width; dash = dash + 9) {
+    //line(dash, i + dash * beta2, dash + 6, i + beta2 * (dash + 6));
     line(i + dash * beta2, 0 + dash, i + beta2 * (dash + 6), dash + 6);
   }
 }
-
 function drawRedAxes(i) {
   //red axes
   stroke(200, 0, 0, 190);
@@ -305,10 +335,10 @@ function drawRedAxes(i) {
     text((i / spacing2).toFixed(0), -10, 0);
   }
   if (
-    gamma2 * gamma2 * i > height / 2 + 20 &&
-    gamma2 * gamma2 * i < (2 * height) / 3 - 10
+    gamma2 * gamma2 * i > 4.5* height / 8  &&
+    gamma2 * gamma2 * i < (2 * height) / 3 
   ) {
-    text("Time", -25, -36);
+    text("Time", -25, 58);
   }
   pop();
 
