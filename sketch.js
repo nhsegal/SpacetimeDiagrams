@@ -336,9 +336,9 @@ function drawRedAxes(i) {
   }
   if (
     gamma2 * gamma2 * i > 4.5* height / 8  &&
-    gamma2 * gamma2 * i < (2 * height) / 3 
+    gamma2 * gamma2 * i < (2 * height) / 3 -20
   ) {
-    text("Time", -25, 58);
+    text("Time", -25, 68);
   }
   pop();
 
