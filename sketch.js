@@ -75,7 +75,7 @@ function draw() {
   stroke(50);
 
   push();
-  translate(width / 2, (2 * height) / 3);
+  translate(width / 2, (3 * height) / 5);
   scale(1, -1);
   if (drawEventsBox.checked()) {
     drawEvents();
@@ -84,7 +84,7 @@ function draw() {
   drawLightCone();
 
   if (drawBarnBox.checked()){
-    drawBarn(0, 1 * gamma1 * gamma1, spacing1 * 5);
+    drawBarn(spacing1 * 2.5, 1 * gamma1 * gamma1, spacing1 * 5);
   }
   if (drawPoleBox.checked()){
     drawPole(-2.5* spacing2, 1 * gamma2 * gamma2, spacing2 * 5);
@@ -370,7 +370,7 @@ function drawControls() {
 function drawBarn(x, y, w) {
   push();
   shearX(atan(beta1));
-  //rectMode(CENTER);
+  rectMode(CENTER);
   noStroke();
   fill(200, 200, 200, 100);
 
